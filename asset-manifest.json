@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/codebook-zoom/static/css/main.5f361e03.chunk.css",
+    "main.js": "/codebook-zoom/static/js/main.d688564c.chunk.js",
+    "main.js.map": "/codebook-zoom/static/js/main.d688564c.chunk.js.map",
+    "runtime-main.js": "/codebook-zoom/static/js/runtime-main.31e4b009.js",
+    "runtime-main.js.map": "/codebook-zoom/static/js/runtime-main.31e4b009.js.map",
+    "static/js/2.9cd35462.chunk.js": "/codebook-zoom/static/js/2.9cd35462.chunk.js",
+    "static/js/2.9cd35462.chunk.js.map": "/codebook-zoom/static/js/2.9cd35462.chunk.js.map",
+    "index.html": "/codebook-zoom/index.html",
+    "precache-manifest.61d3ba3c54fdc781572c12a210c57830.js": "/codebook-zoom/precache-manifest.61d3ba3c54fdc781572c12a210c57830.js",
+    "service-worker.js": "/codebook-zoom/service-worker.js",
+    "static/css/main.5f361e03.chunk.css.map": "/codebook-zoom/static/css/main.5f361e03.chunk.css.map",
+    "static/js/2.9cd35462.chunk.js.LICENSE.txt": "/codebook-zoom/static/js/2.9cd35462.chunk.js.LICENSE.txt",
+    "static/media/logo.svg": "/codebook-zoom/static/media/logo.5d5d9eef.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.31e4b009.js",
+    "static/js/2.9cd35462.chunk.js",
+    "static/css/main.5f361e03.chunk.css",
+    "static/js/main.d688564c.chunk.js"
+  ]
+}
