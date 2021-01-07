@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import Modal from 'react-modal';
-import { Container, Row, Col, Button } from 'reactstrap';
+import Modal from 'react-modal'; //http://reactcommunity.org/react-modal/
+import { Container, Row, Col, Button } from 'reactstrap'; //
+import { GoogleSpreadsheet } from 'google-spreadsheet';
 import './App.css';
 import Codebook from './Containers/Codebook';
 import Questions from './Containers/Questions';
@@ -8,18 +9,30 @@ import Surveys from './Containers/Surveys';
 
 Modal.setAppElement('#root');
 
+const SPREADSHEET_ID = process.env.REACT_APP_SPREADSHEET_ID;
+const SHEET_ID = process.env.REACT_APP_SHEET_ID;
+const RESULTS_ID = process.env.REACT_APP_RESULTS_ID;
+const TLX_ID = process.env.REACT_APP_TLX_ID;
+const ELAB_ID = process.env.REACT_APP_ELAB_ID;
+const CLIENT_EMAIL = process.env.REACT_APP_GOOGLE_CLIENT_EMAIL;
+const PRIVATE_KEY = process.env.REACT_APP_GOOGLE_SERVICE_PRIVATE_KEY;
+
+const doc = new GoogleSpreadsheet(SPREADSHEET_ID);
+
 class App extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
+      uID: 0,
       workerID: 0,
+      completeCode: 0,
       toolOn: true, //True if in codebook on condition, False if in control
-      consentSigned: true, //consentSigned: false,
-      questionsComplete: true, //questionsComplete: false,    
+      consentSigned: false,
+      questionsComplete: false,
       surveysComplete: false,
-      ratingsValues: [],
+      ratingsValues: {},
       qCount: 0,
       tlxResults: {},
       elabResults:{},
@@ -27,44 +40,47 @@ class App extends Component {
   }
 
   componentDidMount() {
-    //this.runExperiment();
+    this.runExperiment();
   }
 
+  appendSpreadsheet = async (sheet0row, resultsrow, tlxrow, elabrow) => {
+    try {
+      await doc.useServiceAccountAuth({
+        client_email: CLIENT_EMAIL,
+        private_key: PRIVATE_KEY,
+      });
+      // loads document properties and worksheets
+      await doc.loadInfo();
+
+      const sheet0 = doc.sheetsById[SHEET_ID];
+      const sheetResults = doc.sheetsById[RESULTS_ID];
+      const sheetTlx = doc.sheetsById[TLX_ID];
+      const sheetElab = doc.sheetsById[ELAB_ID];
+      const result = await sheet0.addRow(sheet0row);
+      const result2 = await sheetResults.addRow(resultsrow);
+      const result3 = await sheetTlx.addRow(tlxrow);
+      const result4 = await sheetElab.addRow(elabrow);
+    } catch (e) {
+      console.error('Error: ', e);
+    }
+  };
+
   runExperiment() {
-    //Show consent in popup
+    //TODO: get workerID from url
+
+    //Calc u_id
+    const uID = Math.floor((Math.random() * 999999) + 10000);
 
     //Calc condition
 
-    //render condition and wait until all questions rated
-
-    //open surveys in popup and wait until surveys completed
-
-    //calc complete code and post data to sheets
-    //data:
-    //workerID
-    //condition
-    //ratingsArray
-    //TLX results
-    //SUS results
-
-    //give code to user
-  }
-
-  onRating = value => {
-    const { qCount, ratingsValues } = this.state;
-    ratingsValues[qCount] = value;
-
     this.setState({
-      ratingsValues: ratingsValues,
-      qCount: qCount + 1,
+      uID: uID,
     });
-
-    if (ratingsValues.length === 10) {
-      this.setState({questionsComplete: true}, () => {
-        console.log(this.state.ratingsValues);
-      });
-    }
   }
+
+  // const newRow = {Worker_ID: 0,	u_ID: this.state.uID,	consent_signed: "true",	generated_code: 0};
+  //
+  // this.appendSpreadsheet(newRow);
 
   signConsent() {
     this.setState({
@@ -72,8 +88,60 @@ class App extends Component {
     });
   }
 
-  toggleModal() {
-    console.log("surveys closed");
+  onRating = value => {
+    const { qCount, ratingsValues } = this.state;
+    ratingsValues['doc'+(qCount+1)] = value;
+
+    this.setState({
+      ratingsValues: ratingsValues,
+      qCount: qCount + 1,
+    });
+
+    if (this.state.qCount+1 === 10) {
+      this.setState({questionsComplete: true}, () => {
+        console.log(this.state.ratingsValues);
+      });
+    }
+  }
+
+  onTLXSubmit = (tlxValues) => {
+    this.setState({
+      tlxResults: tlxValues,
+    });
+  }
+
+  onElabSubmit = (elabValues) => {
+    this.setState({
+      elabResults: elabValues,
+    });
+  }
+
+  finishExperiment = () => {
+
+    const {workerID, uID, toolOn, consentSigned, ratingsValues, tlxResults, elabResults} = this.state;
+
+    //generate completion code
+    const code = Math.floor((Math.random() * 99999) + 10000);
+
+    //append data
+    //sheet 0 {Worker_ID	u_ID	consent_signed	generated_code	paid}
+    //sheet 1002124199 {u_ID	condition	Doc1	Doc2	Doc3	Doc4	Doc5	Doc6	Doc7	Doc8	Doc9	Doc10}
+    //sheet 463326366 {u_ID	tlx1	tlx2	tlx3	tlx4	tlx5	tlx6}
+    //sheet 1139674776 {u_ID	elab1	elab2	elab3	elab4	elab5	elab6	elab7	elab8}
+
+    const sheet0row = {Worker_ID: workerID,	u_ID: uID,	consent_signed: consentSigned,	generated_code: code};
+    const resultsRow = {u_ID: uID,	condition: toolOn,	...ratingsValues};
+    console.log(resultsRow);
+    const tlxRow = {u_ID: uID,	...tlxResults};
+    const elabRow = {u_ID: uID,	...elabResults};
+
+    //this.appendSpreadsheet(SHEET_ID, sheet0row);
+    this.appendSpreadsheet(sheet0row, resultsRow, tlxRow, elabRow);
+
+    this.setState({
+      surveysComplete: true,
+      completeCode: code,
+    });
   }
 
   render() {
@@ -119,11 +187,24 @@ class App extends Component {
         </Container>
         <Modal
           isOpen={questionsComplete && !surveysComplete}
-          onRequestClose={this.toggleModal}
           contentLabel="Surveys"
           shouldCloseOnOverlayClick={false}
         >
-          <Surveys />
+          <Surveys
+            onTLXSubmit={this.onTLXSubmit}
+            onElabSubmit={this.onElabSubmit}
+            onComplete={this.finishExperiment}
+          />
+        </Modal>
+        <Modal
+          isOpen={questionsComplete && surveysComplete}
+          contentLabel="CompletionCode"
+          shouldCloseOnOverlayClick={false}
+        >
+          <div>
+          <p>Thank you for participating! Your completion code is:</p>
+          <p><b>{this.state.completeCode}</b></p>
+          </div>
         </Modal>
       </div>
     );
