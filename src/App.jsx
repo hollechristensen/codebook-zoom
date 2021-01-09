@@ -17,7 +17,7 @@ const ELAB_ID = process.env.REACT_APP_ELAB_ID;
 const CLIENT_EMAIL = process.env.REACT_APP_GOOGLE_CLIENT_EMAIL;
 const PRIVATE_KEY = process.env.REACT_APP_GOOGLE_SERVICE_PRIVATE_KEY;
 
-const doc = new GoogleSpreadsheet(SPREADSHEET_ID);
+const spreadsheet = new GoogleSpreadsheet(SPREADSHEET_ID);
 
 class App extends Component {
 
@@ -33,7 +33,6 @@ class App extends Component {
       questionsComplete: false,
       surveysComplete: false,
       ratingsValues: {},
-      qCount: 0,
       tlxResults: {},
       elabResults:{},
     };
@@ -45,17 +44,17 @@ class App extends Component {
 
   appendSpreadsheet = async (sheet0row, resultsrow, tlxrow, elabrow) => {
     try {
-      await doc.useServiceAccountAuth({
+      await spreadsheet.useServiceAccountAuth({
         client_email: CLIENT_EMAIL,
         private_key: PRIVATE_KEY,
       });
       // loads document properties and worksheets
-      await doc.loadInfo();
+      await spreadsheet.loadInfo();
 
-      const sheet0 = doc.sheetsById[SHEET_ID];
-      const sheetResults = doc.sheetsById[RESULTS_ID];
-      const sheetTlx = doc.sheetsById[TLX_ID];
-      const sheetElab = doc.sheetsById[ELAB_ID];
+      const sheet0 = spreadsheet.sheetsById[SHEET_ID];
+      const sheetResults = spreadsheet.sheetsById[RESULTS_ID];
+      const sheetTlx = spreadsheet.sheetsById[TLX_ID];
+      const sheetElab = spreadsheet.sheetsById[ELAB_ID];
       const result = await sheet0.addRow(sheet0row);
       const result2 = await sheetResults.addRow(resultsrow);
       const result3 = await sheetTlx.addRow(tlxrow);
@@ -88,20 +87,14 @@ class App extends Component {
     });
   }
 
-  onRating = value => {
-    const { qCount, ratingsValues } = this.state;
-    ratingsValues['doc'+(qCount+1)] = value;
-
-    this.setState({
-      ratingsValues: ratingsValues,
-      qCount: qCount + 1,
-    });
-
-    if (this.state.qCount+1 === 10) {
-      this.setState({questionsComplete: true}, () => {
-        console.log(this.state.ratingsValues);
-      });
-    }
+  onRatingComplete  = ratingsValues => {
+    this.setState(
+      {
+        ratingsValues: ratingsValues,
+        questionsComplete: true
+      }, 
+      () => { console.log(this.state.ratingsValues); }
+    );
   }
 
   onTLXSubmit = (tlxValues) => {
@@ -178,9 +171,8 @@ class App extends Component {
             }
             <Col>
               <Questions
-                onRating={this.onRating}
+                onRatingComplete={this.onRatingComplete}
                 toolOn={this.state.toolOn}
-                qCount={this.state.qCount}
               />
             </Col>
           </Row>
