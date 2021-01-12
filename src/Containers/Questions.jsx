@@ -1,34 +1,20 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup } from 'reactstrap';
 import './containers.css';
-
-
+import DocsFile from '../docs.json';
 
 class Questions extends Component {
-
 
   constructor(props) {
     super(props);
 
-    let docs = [
-      {'text':'I\'ve known some friends of mine to take a Gravol (motion sickness & relaxant pill also known as Dramamine or Dimenhydrinate) and they can fall asleep quite easily on the plane.  This doesn\'t work for me but I\'ve known it to work for others and felt it was worth mentioning.', 'value':''},
-      {'text':'doc 2', 'value':''},
-      {'text':'doc 3', 'value':''},
-      {'text':'doc 4', 'value':''},
-      {'text':'doc 5', 'value':''},
-      {'text':'doc 6', 'value':''},
-      {'text':'doc 7', 'value':''},
-      {'text':'doc 8', 'value':''},
-      {'text':'doc 9', 'value':''},
-      {'text':'doc 10', 'value':''},
-    ];
-
     this.state = {
-      docArray: docs,
-      instrRead: true,
-      qualCheck: true,
-      // instrRead: false,
-      // qualCheck: false,
+      docArray: DocsFile.docs,
+      numDocs: DocsFile.numDocs,
+      instrRead: true, // instrRead: false,
+      qualCheck: true, // qualCheck: false,
+      ratingsValues: {},
+      qCount: 0
     };
   }
 
@@ -52,9 +38,25 @@ class Questions extends Component {
     );
   }
 
+  onRating = value => {
+    const { qCount, numDocs, ratingsValues } = this.state;
+    const { onRatingComplete } = this.props;
+
+    ratingsValues['doc'+(qCount+1)] = value;
+
+    this.setState({
+      ratingsValues: ratingsValues,
+      qCount: qCount + 1,
+    });
+
+    if (this.state.qCount + 1 === numDocs) {
+      onRatingComplete(ratingsValues);
+    }
+  }
+
   runTask() {
-    const { instrRead, qualCheck, docArray } = this.state;
-    const { toolOn, onRating, qCount } = this.props;
+    const { instrRead, qualCheck, docArray, qCount } = this.state;
+    const { toolOn } = this.props;
 
     //Instructions
     if (!instrRead) {
@@ -76,21 +78,21 @@ class Questions extends Component {
           <ButtonGroup>
             <Button
               value="10"
-              onClick={() => { onRating(10); }}
+              onClick={() => { this.onRating(10); }}
               onMouseDown={e => e.preventDefault()}
             >
               Relevant
             </Button>
             <Button
               value="5"
-              onClick={() => { onRating(5); }}
+              onClick={() => { this.onRating(5); }}
               onMouseDown={e => e.preventDefault()}
             >
               Slightly Relevant
             </Button>
             <Button
               value="0"
-              onClick={() => { onRating(0); }}
+              onClick={() => { this.onRating(0); }}
               onMouseDown={e => e.preventDefault()}
             >
               Not Relevant
