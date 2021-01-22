@@ -39,6 +39,15 @@ class App extends Component {
   }
 
   componentDidMount() {
+    let search = window.location.search;
+    let params = new URLSearchParams(search);
+    let foo = params.get('workerID');
+    console.log(foo);
+    if (foo) {
+      this.setState({
+        workerID: foo,
+      });
+    }
     this.runExperiment();
   }
 
@@ -92,7 +101,7 @@ class App extends Component {
       {
         ratingsValues: ratingsValues,
         questionsComplete: true
-      }, 
+      },
       () => { console.log(this.state.ratingsValues); }
     );
   }
