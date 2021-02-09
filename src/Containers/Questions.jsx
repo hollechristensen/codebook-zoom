@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup } from 'reactstrap';
+import Modal from 'react-modal';
 import './containers.css';
 import DocsFile from '../docs.json';
+
+Modal.setAppElement('#root');
 
 class Questions extends Component {
 
@@ -11,9 +14,10 @@ class Questions extends Component {
     this.state = {
       docArray: DocsFile.docs,
       numDocs: DocsFile.numDocs,
-      instrRead: true, // instrRead: false,
-      qualCheck: true, // qualCheck: false,
+      instrRead: false,
+      qualCheck: false,
       ratingsValues: {},
+      trapValues: 0, //if trapValues gets to 3, kick user
       qCount: 0
     };
   }
@@ -22,7 +26,10 @@ class Questions extends Component {
     return(
       <div>
         <p>
-          Instruction Text Here
+          For this study, we are collecting data on the worker's experience of labeling data. Read each answer carefully before picking a label.
+        </p>
+        <p>
+          After labeling, you will be asked to fill out two short surveys about your experience. You must complete all portions of the study to recieve compensation for the HIT.
         </p>
         <Button onClick={() => this.setState({instrRead:true})}>Accept</Button>
       </div>
@@ -32,22 +39,58 @@ class Questions extends Component {
   qualityCheck() {
     return(
       <div>
-        <p>Quality Check</p>
-        <Button onClick={() => this.setState({qualCheck:true})}>Accept</Button>
+        <p>We are testing how the codebook provided affects your labeling experience. Read the guides for each label and use them when making rating decisions. Use the codebook instructions under the relevant tab to decide how to rate this answer to the question: </p>
+        <h4>What is the most comfortable way to sleep on a plane?</h4>
+        <p>The best way to improve sleep when on a plane is having head/neck support. Headrests on the seat sometimes fold inwards to support the head, or bring a neck pillow.</p>
+        <ButtonGroup>
+          <Button
+            value="10"
+            onClick={() => this.setState({qualCheck:true}) }
+            onMouseDown={e => e.preventDefault()}
+          >
+            Relevant
+          </Button>
+          <Button
+            value="5"
+            onClick={() => this.setState({qualCheck:true, trapValues: 1}) }
+            onMouseDown={e => e.preventDefault()}
+          >
+            Slightly Relevant
+          </Button>
+          <Button
+            value="0"
+            onClick={() => this.setState({qualCheck:true, trapValues: 1}) }
+            onMouseDown={e => e.preventDefault()}
+          >
+            Not Relevant
+          </Button>
+        </ButtonGroup>
       </div>
     );
   }
 
   onRating = value => {
-    const { qCount, numDocs, ratingsValues } = this.state;
+    const { qCount, numDocs, ratingsValues, docArray } = this.state;
     const { onRatingComplete } = this.props;
+
+    let trapValues = this.state.trapValues;
+
+    //trap question
+    if (docArray[qCount].value !== "") {
+      if (docArray[qCount].value !== value) {
+        trapValues += 1;
+      }
+    }
 
     ratingsValues['doc'+(qCount+1)] = value;
 
     this.setState({
       ratingsValues: ratingsValues,
       qCount: qCount + 1,
+      trapValues: trapValues,
     });
+
+
 
     if (this.state.qCount + 1 === numDocs) {
       onRatingComplete(ratingsValues);
@@ -114,6 +157,15 @@ class Questions extends Component {
     return (
       <div className="q-container" ref={this.mainRef}>
         { this.runTask() }
+        <Modal
+          isOpen={this.state.trapValues === 3}
+          contentLabel="QualCheckFailed"
+          shouldCloseOnOverlayClick={false}
+        >
+          <div>
+          <p>Thank you for participating! However, you did not pass our quality checks and you cannot continue.</p>
+          </div>
+        </Modal>
       </div>
     );
   }

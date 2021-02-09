@@ -54,27 +54,62 @@ class Codebook extends Component {
             <TabPane tabId="rel">
               <Row>
                 <Col sm="12">
-                  <p>Mark answers that fully answer the question as relevant.</p>
+                  <p>Relevant answers should <u>fully</u> answer the question; be clear, consise, and objective; and be concerned with the specific situation described in the question.</p>
+                  <h6>Inclusion Criteria:</h6>
+                  <ul>
+                    <li>Should be about sleeping on commercial flights</li>
+                    <li>Answers that establish credible sources</li>
+                    <li>Answers are well organized</li>
+                    <li>Answers may have a variety of perspectives or alternative solutions</li>
+                  </ul>
+                  <h6>Exclusion Criteria:</h6>
+                  <ul>
+                    <li>Exclude answers that discuss crew (non-passenger) sleeping arrangements</li>
+                    <li>Answers that don't have enough detail to clarify their points</li>
+                    <li>Indirect or rambling answers</li>
+                  </ul>
                   <h6>Example:</h6>
-                  <p>"I was unable to nap on planes as well, now I can't stay awake"</p>
+                  <p>"The best way to improve sleep when on a plane is having head/neck support."</p>
                 </Col>
               </Row>
             </TabPane>
             <TabPane tabId="slightly">
               <Row>
                 <Col sm="12">
-                  <p>Mark answers that partially answer the question as slightly relevant.</p>
+                  <p>Slightly relevant answers are <u>partially</u> applicable to the question. They may not be detailed enough or lack specificity to this question, but still contain potentially useful information.</p>
+                  <h6>Inclusion Criteria:</h6>
+                  <ul>
+                    <li>Answers that do not fully meet the criteria of the relevent label</li>
+                    <li>General advice about sleeping not specific to planes, or if specific to other locations (trains/airports/etc), could still be utilized on a plane</li>
+                    <li>Advice applies only to specific types of people</li>
+                    <li>Answers that expand on someene else's thoughts</li>
+                  </ul>
+                  <h6>Exclusion Criteria:</h6>
+                  <ul>
+                    <li>Well explained solutions useful to the question</li>
+                    <li>Solutions are not clear or answer is too rambling</li>
+                  </ul>
                   <h6>Example:</h6>
-                  <p>Some trains are cold, so a warm thin blanket will be much more comfortable"</p>
+                  <p>"Some trains are cold, so a warm thin blanket will be much more comfortable"</p>
                 </Col>
               </Row>
             </TabPane>
             <TabPane tabId="not">
               <Row>
                 <Col sm="12">
-                  <p>Mark answers that do not answer the question as not relevant.</p>
+                  <p>Not relevant answers <u>do not</u> answer the question, contain incorrect or misleading answers, or may inadequately explain to a point that the answer cannot be considered useful.</p>
+                  <h6>Inclusion Criteria:</h6>
+                  <ul>
+                    <li>Answers not about sleeping at all, or about sleeping issue that can't be even partically related to sleeping on a plane (e.g. jet-lag)</li>
+                    <li>Too short</li>
+                    <li>Tangental answers or answers that raise a new question</li>
+                  </ul>
+                  <h6>Exclusion Criteria:</h6>
+                  <ul>
+                    <li>Advice that can still be useful to the question should only be marked 'not relevant' if they do not sufficently meet the 'slightly relevant' criteria</li>
+                  </ul>
                   <h6>Example:</h6>
-                  <p>""</p>
+                  <p>"I'm currently in Istanbul but will soon head west to the Romania/Bulgaria border (hitchhiking) and intend to buy a cheap tent and sleeping bag on the way."</p>
                 </Col>
               </Row>
             </TabPane>
