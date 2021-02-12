@@ -98,7 +98,7 @@ class Questions extends Component {
   }
 
   runTask() {
-    const { instrRead, qualCheck, docArray, qCount } = this.state;
+    const { instrRead, qualCheck, docArray, numDocs, qCount } = this.state;
     const { toolOn } = this.props;
 
     //Instructions
@@ -112,12 +112,13 @@ class Questions extends Component {
     }
 
     //questions
-    if (qCount < 10) {
+    if (qCount < numDocs) {
       return(
         <div>
           <h4>What is the most comfortable way to sleep on a plane?</h4>
           <h6>Instructions: Rate the relevance of the answer below:</h6>
-          <p> {docArray[qCount].text} </p>
+          {/*<p> {docArray[qCount].text} </p>*/}
+          <div dangerouslySetInnerHTML={ { __html: docArray[qCount].text } }></div>
           <ButtonGroup>
             <Button
               value="10"
