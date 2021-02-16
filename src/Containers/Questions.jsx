@@ -45,22 +45,22 @@ class Questions extends Component {
         <ButtonGroup>
           <Button
             value="10"
-            onClick={() => this.setState({qualCheck:true}) }
-            onMouseDown={e => e.preventDefault()}
+            onClick={e => {this.setState({qualCheck:true});
+                           e.target.blur();}}
           >
             Relevant
           </Button>
           <Button
             value="5"
-            onClick={() => this.setState({qualCheck:true, trapValues: 1}) }
-            onMouseDown={e => e.preventDefault()}
+            onClick={e => {this.setState({qualCheck:true, trapValues: 1}); 
+                           e.target.blur();}}
           >
             Slightly Relevant
           </Button>
           <Button
             value="0"
-            onClick={() => this.setState({qualCheck:true, trapValues: 1}) }
-            onMouseDown={e => e.preventDefault()}
+            onClick={e => {this.setState({qualCheck:true, trapValues: 1}); 
+                           e.target.blur();}}
           >
             Not Relevant
           </Button>
@@ -91,7 +91,7 @@ class Questions extends Component {
     });
 
 
-
+    
     if (this.state.qCount + 1 === numDocs) {
       onRatingComplete(ratingsValues);
     }
@@ -117,27 +117,32 @@ class Questions extends Component {
         <div>
           <h4>What is the most comfortable way to sleep on a plane?</h4>
           <h6>Instructions: Rate the relevance of the answer below:</h6>
-          {/*<p> {docArray[qCount].text} </p>*/}
-          <div dangerouslySetInnerHTML={ { __html: docArray[qCount].text } }></div>
+          {/* <p> */}
+            <p 
+              dangerouslySetInnerHTML={ { __html: docArray[qCount].text } }
+              className="text-ctn fade-out"
+            >
+            </p>
+          {/* </p> */}
           <ButtonGroup>
             <Button
               value="10"
-              onClick={() => { this.onRating(10); }}
-              onMouseDown={e => e.preventDefault()}
+              onClick={e => {this.onRating(10); 
+                             e.target.blur();}}
             >
               Relevant
             </Button>
             <Button
               value="5"
-              onClick={() => { this.onRating(5); }}
-              onMouseDown={e => e.preventDefault()}
+              onClick={e => {this.onRating(5); 
+                             e.target.blur();}}
             >
               Slightly Relevant
             </Button>
             <Button
               value="0"
-              onClick={() => { this.onRating(0); }}
-              onMouseDown={e => e.preventDefault()}
+              onClick={e => {this.onRating(e, 0); 
+                             e.target.blur();}}
             >
               Not Relevant
             </Button>
