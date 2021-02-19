@@ -185,7 +185,7 @@ class App extends Component {
                 <Codebook />
               </Col>
             }
-            <Col>
+            <Col className="p-4">
               <Questions
                 onRatingComplete={this.onRatingComplete}
                 toolOn={this.state.toolOn}

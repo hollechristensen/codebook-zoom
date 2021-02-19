@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TabContent, TabPane, Nav, NavItem, NavLink, Card, CardHeader, CardText, Row, Col } from 'reactstrap';
+import { TabContent, TabPane, Nav, NavItem, NavLink, Card, CardHeader, CardText, CardBody, Row, Col } from 'reactstrap';
 import classnames from 'classnames';
 import './containers.css';
 
@@ -7,7 +7,7 @@ class Codebook extends Component {
 
   constructor(props) {
     super(props);
-
+    
     this.state = {
       activeTab: 'rel',
     };
@@ -23,33 +23,36 @@ class Codebook extends Component {
     return (
       <Card>
         <CardHeader>Codebook</CardHeader>
+        <CardBody>
           <CardText>Prioritize answers that focus on getting to sleep. Answers that focus on planes should be considered most relevant, but answers that cover similar situations may also be considered.</CardText>
-          <Nav tabs justified>
-            <NavItem>
-              <NavLink
-                className={classnames({ active: activeTab === 'rel' })}
-                onClick={() => { this.toggle('rel'); }}
-              >
-                Relevant
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                className={classnames({ active: activeTab === 'slightly' })}
-                onClick={() => { this.toggle('slightly'); }}
-              >
-                Slightly Relevant
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                className={classnames({ active: activeTab === 'not' })}
-                onClick={() => { this.toggle('not'); }}
-              >
-                Not Relevant
-              </NavLink>
-            </NavItem>
-          </Nav>
+        </CardBody>
+        <Nav tabs justified>
+          <NavItem>
+            <NavLink
+              className={classnames({ active: activeTab === 'rel' })}
+              onClick={() => { this.toggle('rel'); }}
+            >
+              Relevant
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classnames({ active: activeTab === 'slightly' })}
+              onClick={() => { this.toggle('slightly'); }}
+            >
+              Slightly Relevant
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classnames({ active: activeTab === 'not' })}
+              onClick={() => { this.toggle('not'); }}
+            >
+              Not Relevant
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <CardBody>
           <TabContent activeTab={activeTab}>
             <TabPane tabId="rel">
               <Row>
@@ -57,17 +60,18 @@ class Codebook extends Component {
                   <p>Relevant answers should <u>fully</u> answer the question; be clear, consise, and objective; and be concerned with the specific situation described in the question.</p>
                   <h6>Inclusion Criteria:</h6>
                   <ul>
-                    <li>Should be about sleeping on commercial flights</li>
-                    <li>Answers that establish credible sources</li>
-                    <li>Answers are well organized</li>
-                    <li>Answers may have a variety of perspectives or alternative solutions</li>
+                    <li><span role="img" aria-label="check">✅</span> Answers about sleeping on commercial flights</li>
+                    <li><span role="img" aria-label="check">✅</span> Answers that establish credible sources</li>
+                    <li><span role="img" aria-label="check">✅</span> Answers that are well organized</li>
+                    <li><span role="img" aria-label="check">✅</span> Answers that may have a variety of perspectives or alternative solutions</li>
                   </ul>
                   <h6>Exclusion Criteria:</h6>
                   <ul>
-                    <li>Exclude answers that discuss crew (non-passenger) sleeping arrangements</li>
-                    <li>Answers that don't have enough detail to clarify their points</li>
-                    <li>Indirect or rambling answers</li>
+                    <li><span role="img" aria-label="cross">❌</span> Answers that discuss crew/non-passenger sleeping arrangements</li>
+                    <li><span role="img" aria-label="cross">❌</span> Answers that lack enough detail to clarify their points</li>
+                    <li><span role="img" aria-label="cross">❌</span> Answers that are indirect or rambling</li>
                   </ul>
+                  <hr></hr>
                   <h6>Example:</h6>
                   <p>"The best way to improve sleep when on a plane is having head/neck support."</p>
                 </Col>
@@ -79,16 +83,17 @@ class Codebook extends Component {
                   <p>Slightly relevant answers are <u>partially</u> applicable to the question. They may not be detailed enough or lack specificity to this question, but still contain potentially useful information.</p>
                   <h6>Inclusion Criteria:</h6>
                   <ul>
-                    <li>Answers that do not fully meet the criteria of the relevent label</li>
-                    <li>General advice about sleeping not specific to planes, or if specific to other locations (trains/airports/etc), could still be utilized on a plane</li>
-                    <li>Advice applies only to specific types of people</li>
-                    <li>Answers that expand on someene else's thoughts</li>
+                    <li><span role="img" aria-label="check">✅</span> Answers that do not fully meet the criteria of the relevent label</li>
+                    <li><span role="img" aria-label="check">✅</span> Answers about sleeping not specific to planes, or if specific to other locations (trains/airports/etc), could still be utilized on a plane</li>
+                    <li><span role="img" aria-label="check">✅</span> Answers that apply only to specific types of people</li>
+                    <li><span role="img" aria-label="check">✅</span> Answers that expand on someone else's thoughts</li>
                   </ul>
                   <h6>Exclusion Criteria:</h6>
                   <ul>
-                    <li>Well explained solutions useful to the question</li>
-                    <li>Solutions are not clear or answer is too rambling</li>
+                    <li><span role="img" aria-label="cross">❌</span> Answers that are well explained and useful to the question</li>
+                    <li><span role="img" aria-label="cross">❌</span> Answers that are not clear or are too rambling</li>
                   </ul>
+                  <hr></hr>
                   <h6>Example:</h6>
                   <p>"Some trains are cold, so a warm thin blanket will be much more comfortable"</p>
                 </Col>
@@ -100,20 +105,22 @@ class Codebook extends Component {
                   <p>Not relevant answers <u>do not</u> answer the question, contain incorrect or misleading answers, or may inadequately explain to a point that the answer cannot be considered useful.</p>
                   <h6>Inclusion Criteria:</h6>
                   <ul>
-                    <li>Answers not about sleeping at all, or about sleeping issue that can't be even partically related to sleeping on a plane (e.g. jet-lag)</li>
-                    <li>Too short</li>
-                    <li>Tangental answers or answers that raise a new question</li>
+                    <li><span role="img" aria-label="check">✅</span> Answers not about sleeping at all, or about sleeping issue that can't be even partically related to sleeping on a plane (e.g. jet-lag)</li>
+                    <li><span role="img" aria-label="check">✅</span> Answers that are too short</li>
+                    <li><span role="img" aria-label="check">✅</span> Answers that raise new questions</li>
                   </ul>
                   <h6>Exclusion Criteria:</h6>
                   <ul>
-                    <li>Advice that can still be useful to the question should only be marked 'not relevant' if they do not sufficently meet the 'slightly relevant' criteria</li>
+                    <li><span role="img" aria-label="cross">❌</span> Answers that can still be useful to the question should only be marked 'not relevant' if they do not sufficently meet the 'slightly relevant' criteria</li>
                   </ul>
+                  <hr></hr>
                   <h6>Example:</h6>
                   <p>"I'm currently in Istanbul but will soon head west to the Romania/Bulgaria border (hitchhiking) and intend to buy a cheap tent and sleeping bag on the way."</p>
                 </Col>
               </Row>
             </TabPane>
           </TabContent>
+        </CardBody>
       </Card>
     );
   }
