@@ -56,6 +56,7 @@ class App extends Component {
   }
 
   componentDidUpdate() {
+    window.scrollTo(0, 0)
     if (this.state.tlxComplete && this.state.elabComplete && this.state.completeCode === 0) {
       this.finishExperiment();
     }

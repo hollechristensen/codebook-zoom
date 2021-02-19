@@ -22,6 +22,10 @@ class Questions extends Component {
     };
   }
 
+  componentDidUpdate() {
+    window.scrollTo(0, 0)
+  }
+
   displayInstructions() {
     return(
       <div>
@@ -52,14 +56,14 @@ class Questions extends Component {
           </Button>
           <Button
             value="5"
-            onClick={e => {this.setState({qualCheck:true, trapValues: 1}); 
+            onClick={e => {this.setState({qualCheck:true, trapValues: 1});
                            e.target.blur();}}
           >
             Slightly Relevant
           </Button>
           <Button
             value="0"
-            onClick={e => {this.setState({qualCheck:true, trapValues: 1}); 
+            onClick={e => {this.setState({qualCheck:true, trapValues: 1});
                            e.target.blur();}}
           >
             Not Relevant
@@ -70,6 +74,7 @@ class Questions extends Component {
   }
 
   onRating = value => {
+    console.log(value);
     const { qCount, numDocs, ratingsValues, docArray } = this.state;
     const { onRatingComplete } = this.props;
 
@@ -91,7 +96,7 @@ class Questions extends Component {
     });
 
 
-    
+
     if (this.state.qCount + 1 === numDocs) {
       onRatingComplete(ratingsValues);
     }
@@ -118,7 +123,7 @@ class Questions extends Component {
           <h4>What is the most comfortable way to sleep on a plane?</h4>
           <h6>Instructions: Rate the relevance of the answer below:</h6>
           {/* <p> */}
-            <p 
+            <p
               dangerouslySetInnerHTML={ { __html: docArray[qCount].text } }
               className="text-ctn fade-out"
             >
@@ -127,21 +132,21 @@ class Questions extends Component {
           <ButtonGroup>
             <Button
               value="10"
-              onClick={e => {this.onRating(10); 
+              onClick={e => {this.onRating(10);
                              e.target.blur();}}
             >
               Relevant
             </Button>
             <Button
               value="5"
-              onClick={e => {this.onRating(5); 
+              onClick={e => {this.onRating(5);
                              e.target.blur();}}
             >
               Slightly Relevant
             </Button>
             <Button
               value="0"
-              onClick={e => {this.onRating(e, 0); 
+              onClick={e => {this.onRating(0);
                              e.target.blur();}}
             >
               Not Relevant
