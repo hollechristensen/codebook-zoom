@@ -31,11 +31,15 @@ class App extends Component {
       toolOn: true, //True if in codebook on condition, False if in control
       consentSigned: false,
       questionsComplete: false,
+      tlxComplete: false,
+      elabComplete: false,
       surveysComplete: false,
       ratingsValues: {},
       tlxResults: {},
       elabResults:{},
     };
+
+    this.finishExperiment = this.finishExperiment.bind(this);
   }
 
   componentDidMount() {
@@ -49,6 +53,12 @@ class App extends Component {
       });
     }
     this.runExperiment();
+  }
+
+  componentDidUpdate() {
+    if (this.state.tlxComplete && this.state.elabComplete && this.state.completeCode === 0) {
+      this.finishExperiment();
+    }
   }
 
   appendSpreadsheet = async (sheet0row, resultsrow, tlxrow, elabrow) => {
@@ -74,8 +84,6 @@ class App extends Component {
   };
 
   runExperiment() {
-    //TODO: get workerID from url
-
     //Calc u_id
     const uID = Math.floor((Math.random() * 999999) + 10000);
 
@@ -85,10 +93,6 @@ class App extends Component {
       uID: uID,
     });
   }
-
-  // const newRow = {Worker_ID: 0,	u_ID: this.state.uID,	consent_signed: "true",	generated_code: 0};
-  //
-  // this.appendSpreadsheet(newRow);
 
   signConsent() {
     this.setState({
@@ -109,16 +113,19 @@ class App extends Component {
   onTLXSubmit = (tlxValues) => {
     this.setState({
       tlxResults: tlxValues,
+      tlxComplete: true,
     });
   }
 
   onElabSubmit = (elabValues) => {
     this.setState({
       elabResults: elabValues,
+      elabComplete: true,
     });
   }
 
-  finishExperiment = () => {
+  finishExperiment() {
+    //e.preventDefault();
 
     const {workerID, uID, toolOn, consentSigned, ratingsValues, tlxResults, elabResults} = this.state;
 
@@ -160,7 +167,7 @@ class App extends Component {
           <div>
           <p>You are being asked to complete a study for research purposes. The study is testing how data collection is affected by the use of additional tooling to assist workers. Completing this study is voluntary and you can stop at any time by closing this window.</p>
           <p>You must be 18 years of age or older to participate in this study.</p>
-          <p>There are minimal risks associated with your participation in this study. You will receive $2 for completing this study. In order to receive full compensation for completing the study, you must complete all parts of the study and pass all attention checks, then enter the provided random number code into the MTurk HIT window.</p>
+          <p>There are minimal risks associated with your participation in this study. You will receive $5 for completing this study. In order to receive full compensation for completing the study, you must complete all parts of the study and pass all attention checks, then enter the provided random number code into the MTurk HIT window.</p>
           <p>Please note that because you are participating in this research via MTurk, your participation will be listed on your MTurk profile. However, MTurk will not have access to your responses on the survey. Further, while we will have access to your MTurk ID, we will only use this information to pay you and then your ID will be deleted from our records and will no longer be associated with your responses.</p>
           <p>If you have any questions about the study itself, how it is implemented, or study compensation, please contact J Christensen at jtchrist@ncsu.edu or B Watson at bwatson@ncsu.edu . Please reference study number 16906 when contacting anyone about this project.</p>
           <p>If you have questions about your rights as a participant or are concerned with your treatment throughout the research process, please contact the NC State University IRB Director at IRB-Director@ncsu.edu, 919-515-8754, or fill out this confidential form online.</p>
@@ -194,7 +201,8 @@ class App extends Component {
           <Surveys
             onTLXSubmit={this.onTLXSubmit}
             onElabSubmit={this.onElabSubmit}
-            onComplete={this.finishExperiment}
+            tlxComplete={this.state.tlxComplete}
+            elabComplete={this.state.elabComplete}
           />
         </Modal>
         <Modal

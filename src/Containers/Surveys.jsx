@@ -4,14 +4,9 @@ import './containers.css';
 
 class Surveys extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      tlxComplete: false,
-      elabComplete: false,
-    };
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   tlxSubmit = (e) => {
     e.preventDefault();
@@ -26,10 +21,6 @@ class Surveys extends Component {
     }
 
     this.props.onTLXSubmit(tlxValues);
-
-    this.setState({
-      tlxComplete: true,
-    });
   }
 
   elabSubmit = (e) => {
@@ -47,10 +38,6 @@ class Surveys extends Component {
     }
 
     this.props.onElabSubmit(elabValues);
-
-    this.setState({
-      elabComplete: true,
-    });
   }
 
   tlxScales() {
@@ -203,7 +190,7 @@ class Surveys extends Component {
   }
 
   runSurveys() {
-    const { tlxComplete, elabComplete } = this.state;
+    const { tlxComplete, elabComplete } = this.props;
 
     if (!tlxComplete) {
       return this.tlxScales();
@@ -212,7 +199,15 @@ class Surveys extends Component {
       return this.elabSurvey();
     }
 
-    return this.props.onComplete();
+    // if (tlxComplete && elabComplete) {
+    //   return this.props.onComplete();
+    // }
+
+    return null;
+  }
+
+  componentWillUnmount() {
+    console.log("surveys unmounted");
   }
 
   render() {
