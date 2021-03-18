@@ -34,7 +34,8 @@ class Surveys extends Component {
       'elab5': e.target.e_q5.value,
       'elab6': e.target.e_q6.value,
       'elab7': e.target.e_q7.value,
-      'elab8': e.target.e_q8.value
+      'elab8': e.target.e_q8.value,
+      'elab9': e.target.e_q9.value
     }
 
     this.props.onElabSubmit(elabValues);
@@ -182,6 +183,12 @@ class Surveys extends Component {
           Strongly disagree
           <Input type="range" id="e_q8" defaultValue="3" min="1" max="5" />
           strongly agree
+        </div>
+        <Label>Rate your level of understanding of how machine learning classification algorithms are trained</Label>
+        <div className="elab-row" id="e_q9">
+          Novice
+          <Input type="range" id="e_q9" defaultValue="4" min="1" max="7" />
+          expert
         </div>
         <Button type="submit">Submit</Button>
       </Form>
