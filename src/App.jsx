@@ -63,26 +63,26 @@ class App extends Component {
   }
 
   appendSpreadsheet = async (sheet0row, resultsrow, tlxrow, elabrow) => {
-    try {
-      await spreadsheet.useServiceAccountAuth({
-        client_email: CLIENT_EMAIL,
-        private_key: PRIVATE_KEY,
-      });
-      // loads document properties and worksheets
-      await spreadsheet.loadInfo();
+    // try {
+    //   await spreadsheet.useServiceAccountAuth({
+    //     client_email: CLIENT_EMAIL,
+    //     private_key: PRIVATE_KEY,
+    //   });
+    //   // loads document properties and worksheets
+    //   await spreadsheet.loadInfo();
 
-      const sheet0 = spreadsheet.sheetsById[SHEET_ID];
-      const sheetResults = spreadsheet.sheetsById[RESULTS_ID];
-      const sheetTlx = spreadsheet.sheetsById[TLX_ID];
-      const sheetElab = spreadsheet.sheetsById[ELAB_ID];
+    //   const sheet0 = spreadsheet.sheetsById[SHEET_ID];
+    //   const sheetResults = spreadsheet.sheetsById[RESULTS_ID];
+    //   const sheetTlx = spreadsheet.sheetsById[TLX_ID];
+    //   const sheetElab = spreadsheet.sheetsById[ELAB_ID];
 
-      const result = await sheet0.addRow(sheet0row, {insert: true});
-      const result2 = await sheetResults.addRow(resultsrow, {insert: true});
-      const result3 = await sheetTlx.addRow(tlxrow, {insert: true});
-      const result4 = await sheetElab.addRow(elabrow, {insert: true});
-    } catch (e) {
-      console.error('Error: ', e);
-    }
+    //   const result = await sheet0.addRow(sheet0row, {insert: true});
+    //   const result2 = await sheetResults.addRow(resultsrow, {insert: true});
+    //   const result3 = await sheetTlx.addRow(tlxrow, {insert: true});
+    //   const result4 = await sheetElab.addRow(elabrow, {insert: true});
+    // } catch (e) {
+    //   console.error('Error: ', e);
+    // }
   };
 
   runExperiment() {
@@ -147,12 +147,22 @@ class App extends Component {
     const elabRow = {u_ID: uID,	...elabResults};
 
     //this.appendSpreadsheet(SHEET_ID, sheet0row);
-    this.appendSpreadsheet(sheet0row, resultsRow, tlxRow, elabRow);
-
-    this.setState({
-      surveysComplete: true,
-      completeCode: code,
-    });
+    // this.appendSpreadsheet(sheet0row, resultsRow, tlxRow, elabRow);
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ consent: sheet0row, ratings: resultsRow,
+                             tlx_answers: tlxRow, elab_answers: elabRow })
+    };
+    fetch('https://script.google.com/macros/s/AKfycbysvtxKlgBzNE1m-1zxeKrzp0t2vozOo8jWN9c34MxWLKTfSQ9q13NFM0smrAc3VqmX/exec', requestOptions)
+        .then(response => {
+          console.log(response);
+          this.setState({
+                surveysComplete: true,
+                completeCode: code,
+              });
+        })
+        .catch(error => console.log(error));
   }
 
   render() {
