@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/codebook-zoom/static/css/main.a57c286a.chunk.css",
-    "main.js": "/codebook-zoom/static/js/main.0e5be20e.chunk.js",
-    "main.js.map": "/codebook-zoom/static/js/main.0e5be20e.chunk.js.map",
+    "main.js": "/codebook-zoom/static/js/main.a96a8701.chunk.js",
+    "main.js.map": "/codebook-zoom/static/js/main.a96a8701.chunk.js.map",
     "runtime-main.js": "/codebook-zoom/static/js/runtime-main.31e4b009.js",
     "runtime-main.js.map": "/codebook-zoom/static/js/runtime-main.31e4b009.js.map",
     "static/css/2.9a766daa.chunk.css": "/codebook-zoom/static/css/2.9a766daa.chunk.css",
     "static/js/2.a8b17d66.chunk.js": "/codebook-zoom/static/js/2.a8b17d66.chunk.js",
     "static/js/2.a8b17d66.chunk.js.map": "/codebook-zoom/static/js/2.a8b17d66.chunk.js.map",
     "index.html": "/codebook-zoom/index.html",
-    "precache-manifest.ba7a36cb109305bf49adc7b01fc55cf7.js": "/codebook-zoom/precache-manifest.ba7a36cb109305bf49adc7b01fc55cf7.js",
+    "precache-manifest.fa8fc73e27ac9467e8747c1cd1a1caae.js": "/codebook-zoom/precache-manifest.fa8fc73e27ac9467e8747c1cd1a1caae.js",
     "service-worker.js": "/codebook-zoom/service-worker.js",
     "static/css/2.9a766daa.chunk.css.map": "/codebook-zoom/static/css/2.9a766daa.chunk.css.map",
     "static/css/main.a57c286a.chunk.css.map": "/codebook-zoom/static/css/main.a57c286a.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.9a766daa.chunk.css",
     "static/js/2.a8b17d66.chunk.js",
     "static/css/main.a57c286a.chunk.css",
-    "static/js/main.0e5be20e.chunk.js"
+    "static/js/main.a96a8701.chunk.js"
   ]
 }
